@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "522562505288",
+    "project_id": "khareedu1-ec6d7",
+    "storage_bucket": "khareedu1-ec6d7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522562505288:android:074935b968dab8eb56667d",
+        "android_client_info": {
+          "package_name": "com.example.khareedu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-Q5VZLvyzQUeBAjH4uAE9Sk6FbpQX-5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
