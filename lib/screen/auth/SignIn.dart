@@ -5,6 +5,7 @@ import 'package:khareedu/controller/google-sign-in-controller.dart';
 import 'package:khareedu/controller/sign-in-controller.dart';
 import 'package:khareedu/controller/sign-up-controller.dart';
 import 'package:khareedu/controller/user-Data-Controller.dart';
+import 'package:khareedu/screen/admin-panel/admin-Panel.dart';
 import 'package:khareedu/utils/app-constant.dart';
 import 'package:lottie/lottie.dart';
 
@@ -124,12 +125,20 @@ class _SignInState extends State<SignIn> {
                             email,
                             password);
 
+                        var userData = await userDataController.getUserData(userCredential!.user!.uid);
+
+                        if(userData[0]['isAdmin']== true)
+                          {
+                            Get.offAll(()=>Admin_panel());
+                          }
+                        else
+                          {
+                            Get.offAll(()=>MainScreen());
+                          }
                         if(userCredential != null)
                         {
                           if(userCredential.user!.emailVerified)
                             {
-                              Get.offAll(()=>MainScreen());
-
                               Get.snackbar("Error", "Login Successfully",
                                   snackPosition: SnackPosition.BOTTOM,
                                   backgroundColor: Appconst.secondarycolor,

@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       ),
-      home: const SplashScreen(),
+      home:  SplashScreen(),
       builder: EasyLoading.init(),
     );
   }
