@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 class DeviceTokenController extends GetxController
 {
   String? Token;
-
   @override
   void onInit() {
     super.onInit();
