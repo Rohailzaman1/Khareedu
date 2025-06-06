@@ -17,9 +17,9 @@ class DeviceTokenController extends GetxController
       String? token = await FirebaseMessaging.instance.getToken();
       if(token!=null)
         {
-         print("Token: $token");
+         // print("Token: $token");
           Token = token.toString();
-          print("Token: $Token");
+          // print("Token: $Token");
           update();
         }
     }catch (e)

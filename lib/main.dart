@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:khareedu/utils/Category_Widget.dart';
 import 'screen/auth/splash_screenn.dart';
 
 Future<void> main() async{

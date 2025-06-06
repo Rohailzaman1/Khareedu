@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:khareedu/screen/auth/welcome_screen.dart';
+import 'package:khareedu/utils/Category_Widget.dart';
+import 'package:khareedu/utils/Custom_banners.dart';
+import 'package:khareedu/utils/Custom_drawer.dart';
+import 'package:khareedu/utils/Custome_Category.dart';
 import 'package:khareedu/utils/app-constant.dart';
 
 class MainScreen extends StatefulWidget {
@@ -23,20 +26,34 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: Appconst.maincolor,
           title: Text("KHAREEDU",style: TextStyle(color: Colors.black87,fontSize: 20)),
           centerTitle: true,
-          actions: [
-            GestureDetector(
-              onTap: () async
-              {
 
-                await _auth.signOut();
-           await googleSignIn.signOut();
-           Get.offAll(()=>WelcomeScreen());
-              },
-              child: Icon(Icons.logout),
-            )
-          ],
+        ),
+      drawer: CustomDrawer(),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Container(
+          child:Column(
+            children: [
+              SizedBox(
+                height: Get.height/90,
+              ),
+              CustomeBanners(),
+              Divider(
+                thickness: 2,
+                color: Colors.grey,
+              ),
+              CustomeCategory(CategoryName: 'Jeans',
+                CategorySub: 'Cotton and Some thing Other in the filed',
+                onTap: () {  },
+                SeeMoreText: 'See More',),
+              CategoryWidget(),
+            ],
+          )
+
+          ,
         ),
 
+      ),
     );
   }
 }
