@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:image_card/image_card.dart';
 import 'package:khareedu/model/category_model.dart';
 import 'package:khareedu/screen/user-panel/Single_Category_Product.dart';
-
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget({super.key});
 

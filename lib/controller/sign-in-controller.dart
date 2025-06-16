@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:khareedu/model/user-model.dart';
 
 
-
 class SignInController extends GetxController{
 
   final FirebaseAuth _auth = FirebaseAuth.instance;

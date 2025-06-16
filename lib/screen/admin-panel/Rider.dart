@@ -7,7 +7,6 @@ import 'package:khareedu/controller/google_API_controller.dart';
 class MapView extends StatelessWidget {
   final mapController = Get.put(Google_API_Controller());
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

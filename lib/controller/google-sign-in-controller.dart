@@ -9,7 +9,6 @@ import 'package:khareedu/screen/user-panel/main-screen.dart';
 import 'Device-Token-Controller.dart';
 
 
-
 class GoogleSignInController extends GetxController
 {
   final GoogleSignIn gooogleSignIn = GoogleSignIn();

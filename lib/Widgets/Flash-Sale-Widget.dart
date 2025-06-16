@@ -61,7 +61,6 @@ class FlashSaleWidget extends StatelessWidget {
                   onTap: ()=>Get.to(()=>AllProductDetail(productModel: productModel,),),
                   child: Row(
                     children: [
-
                       Padding(
                         padding: EdgeInsets.all(5),
                         child: Container(

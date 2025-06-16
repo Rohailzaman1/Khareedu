@@ -54,7 +54,6 @@ class AllProductWidget extends StatelessWidget {
                   updatedDate: snapshot.data!.docs[index]['updatedDate'],
                   isSale: snapshot.data!.docs[index]['isSale'],
                 );
-
                 return GestureDetector(
                   onTap: ()=>Get.to(()=>AllProductDetail(productModel: productModel,),),
                   child: Row(

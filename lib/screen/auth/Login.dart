@@ -15,7 +15,6 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
-
 class _LoginState extends State<Login> {
   SignupCtroller signupController = Get.put(SignupCtroller());
   TextEditingController userName = TextEditingController();

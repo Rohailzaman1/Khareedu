@@ -24,7 +24,6 @@ class _CartState extends State<Cart> {
     return Scaffold(
       appBar: AppBar(
 
-
         backgroundColor: Appconst.maincolor,
         title: Center(
           child: Text(

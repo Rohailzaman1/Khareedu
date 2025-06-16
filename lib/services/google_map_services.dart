@@ -10,7 +10,6 @@ class GoogleApiService {
 
     final response = await http.get(Uri.parse(url));
 
-
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {

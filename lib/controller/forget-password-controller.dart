@@ -4,7 +4,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:khareedu/utils/app-constant.dart';
 
-
 import '../screen/auth/SignIn.dart';
 
 class forgetPasswordController extends GetxController {

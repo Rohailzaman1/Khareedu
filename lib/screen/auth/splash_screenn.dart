@@ -19,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
-
     super.initState();
     Timer(Duration(seconds: 5), () {
       Get.offAll(WelcomeScreen());

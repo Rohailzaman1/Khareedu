@@ -12,7 +12,6 @@ class CustomeBanners extends StatefulWidget {
   State<CustomeBanners> createState() => _CustomeBannersState();
 }
 
-
 class _CustomeBannersState extends State<CustomeBanners> {
   final CarouselController carouselController = CarouselController();
  final BannerController _bannerController = Get.put(BannerController());
