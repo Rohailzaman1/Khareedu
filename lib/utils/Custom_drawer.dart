@@ -57,6 +57,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             thickness: 2,
             color: Colors.grey,
           ),
+
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: ListTile(

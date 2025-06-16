@@ -12,6 +12,7 @@ class CategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder(
       future: FirebaseFirestore.instance.collection('categories').get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

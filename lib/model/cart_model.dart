@@ -1,5 +1,6 @@
 class CartModel
 {
+
   String categoryId;
   String categoryName;
   String productName;

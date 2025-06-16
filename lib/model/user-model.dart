@@ -30,6 +30,7 @@ class UserModel {
     required this.createdOn,
   });
 
+
   Map<String, dynamic> toMap() {
     return {
       'uId': uId,

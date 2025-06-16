@@ -1,5 +1,6 @@
 class ProductModel
 {
+
    String categoryId;
   String categoryName;
    String productName;

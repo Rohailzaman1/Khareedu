@@ -13,6 +13,7 @@ class forgetPassword extends StatefulWidget {
   @override
   State<forgetPassword> createState() => _forgetPasswordState();
 }
+
 class _forgetPasswordState extends State<forgetPassword> {
   final forgetPasswordController forgetPassword = Get.put(forgetPasswordController());
   final TextEditingController Email = TextEditingController();

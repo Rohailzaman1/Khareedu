@@ -56,6 +56,7 @@ class _SingleCategoryProductState extends State<SingleCategoryProduct> {
                 mainAxisSpacing: 10,
                 childAspectRatio: 0.75,
               ),
+
               itemBuilder: (context, index) {
                 final data =
                 snapshot.data!.docs[index].data() as Map<String, dynamic>;

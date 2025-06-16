@@ -7,4 +7,5 @@ class Appconst
   static const maincolor = Colors.red;
   static const secondarycolor = Colors.deepOrangeAccent;
   static const Textcolor = Colors.white;
+
 }

@@ -37,6 +37,7 @@ class HeadingWidget extends StatelessWidget {
                 ]
             ),
             GestureDetector(
+
               onTap: onTap,
               child: Container(
                   decoration: BoxDecoration(

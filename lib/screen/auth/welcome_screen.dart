@@ -77,12 +77,14 @@ SizedBox(height: Get.height/40),
                   onPressed: () {
                     Get.offAll(SignIn());
                   },
+
                   label: Text("Sign-In With Email"),
                 ),
               ),
             ),
           ],
         ),
+
       ),
     );
   }

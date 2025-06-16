@@ -8,6 +8,7 @@ import 'package:khareedu/model/user-model.dart';
 import 'Device-Token-Controller.dart';
 
 
+
 class SignupCtroller extends GetxController{
 
     final FirebaseAuth _auth = FirebaseAuth.instance;

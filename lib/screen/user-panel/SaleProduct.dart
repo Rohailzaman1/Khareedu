@@ -75,6 +75,7 @@ class _SaleProductState extends State<SaleProduct> {
                     updatedDate: data['updatedDate'],
                     isSale: data['isSale'],
                   );
+
                   return  GestureDetector(
                     onTap: ()=>Get.to(()=>AllProductDetail(productModel: productModel,),),
                     child: FillImageCard(
