@@ -5,8 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_card/image_card.dart' show FillImageCard;
+import 'package:khareedu/model/Review_Model.dart';
 import 'package:khareedu/model/cart_model.dart';
+import 'package:khareedu/model/category_model.dart' show CategoryModel;
 import 'package:khareedu/model/product_model.dart';
+import 'package:khareedu/screen/user-panel/Single_Category_Product.dart';
 import 'package:khareedu/utils/app-constant.dart';
 
 import 'Cart.dart';
@@ -192,6 +196,97 @@ class _AllProductDetailState extends State<AllProductDetail> {
                 ),
               ),
             ),
+            FutureBuilder(
+
+              future: FirebaseFirestore.instance.collection('products').doc(widget.productModel.productId).collection('reviews').get(),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return const Center(child: Text("Some Error"));
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CupertinoActivityIndicator());
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text("No Reviews Found"));
+                }
+                if(snapshot!=null)
+                  {
+                   return Expanded(
+                     child: ListView.builder(
+                         itemCount: snapshot.data!.docs.length,
+
+                         itemBuilder: (context, index)
+                         {
+                              var data = snapshot.data!.docs[index];
+                              ReviewModel reviewModel = ReviewModel(
+                                  customerName: data['customerName'],
+                                  customerPhone: data['customerPhone'],
+                                  customerToken: data['customerDeviceToken'],
+                                  customerId: data['customerId'],
+                                  feedBack: data['feedBack'],
+                                  rating: data['rating'],
+                                  createdAt: data['createdAt']);
+
+                              return Card(
+                                elevation: 5,
+                                child: ListTile(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  leading: CircleAvatar(
+                                    backgroundColor: Colors.grey.shade300,
+                                    child: Text(
+                                      reviewModel.customerName.isNotEmpty
+                                          ? reviewModel.customerName[0].toUpperCase()
+                                          : "?",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  title: Text(
+                                    reviewModel.customerName,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  subtitle: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 4),
+                                      Text(
+                                        reviewModel.feedBack,
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.star, color: Colors.amber, size: 16),
+                                          SizedBox(width: 4),
+                                          Text(
+                                            reviewModel.rating,
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+
+                         }
+
+
+                     ),
+                   );
+
+                  }
+                return Container();
+
+              },
+            ),
           ],
         ),
       ),
@@ -199,7 +294,7 @@ class _AllProductDetailState extends State<AllProductDetail> {
   }
 
   Future<void> checkproductExisting({required String uId}) async {
-    final int incrementQuantity = 1;
+    final int  Quantity = 1;
     final DocumentReference documentReference = FirebaseFirestore.instance
         .collection('carts')
         .doc(uId)
@@ -209,7 +304,7 @@ class _AllProductDetailState extends State<AllProductDetail> {
     DocumentSnapshot snapshot = await documentReference.get();
     if (snapshot.exists) {
       int incrementQuantity = snapshot['productQuantity'];
-      int updateQuantity = incrementQuantity + incrementQuantity;
+      int updateQuantity = incrementQuantity + Quantity;
       double totalPrice =
           double.parse(
             widget.productModel.isSale
@@ -220,6 +315,7 @@ class _AllProductDetailState extends State<AllProductDetail> {
       await documentReference.update({
         'productQuantity': updateQuantity,
         'totalPrice': totalPrice,
+        'updatedDate': DateTime.now(),
       });
       print("Product Exit");
     } else {

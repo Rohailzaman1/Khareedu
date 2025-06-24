@@ -7,30 +7,46 @@ import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:khareedu/controller/cart-price-Controller.dart';
+import 'package:khareedu/controller/customer_token_Controller.dart';
 import 'package:khareedu/model/cart_model.dart';
+import 'package:khareedu/services/place_order_Services.dart';
 import 'package:khareedu/utils/app-constant.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import 'CheckOutScreen.dart';
 import 'ProductDetail.dart';
 
-class Cart extends StatefulWidget {
-  const Cart({super.key});
+class CheckOutScreen extends StatefulWidget {
+  const CheckOutScreen({super.key});
 
   @override
-  State<Cart> createState() => _CartState();
+  State<CheckOutScreen> createState() => _CheckOutScreenState();
 }
 
-class _CartState extends State<Cart> {
-  final CartPriceController cartPriceController = Get.put(CartPriceController());
+class _CheckOutScreenState extends State<CheckOutScreen> {
+  late String name;
+  late String phone;
+  late String address;
+  late String Customertoken;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
+  final CartPriceController cartPriceController = Get.put(
+    CartPriceController(),
+  );
   User? user = FirebaseAuth.instance.currentUser;
+  Razorpay  _razorpay = Razorpay();
   @override
   Widget build(BuildContext context) {
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Appconst.maincolor,
         title: Center(
           child: Text(
-            "Cart",
+            "Checkout",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
           ),
         ),
@@ -123,64 +139,6 @@ class _CartState extends State<Cart> {
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    if (cartModel.productQuantity > 0) {
-                                      FirebaseFirestore.instance
-                                          .collection('carts')
-                                          .doc(user!.uid)
-                                          .collection('cartOrders')
-                                          .doc(cartModel.productId)
-                                          .update({
-                                            'productQuantity':
-                                                cartModel.productQuantity - 1,
-                                            'totalPrice':
-                                                double.parse(
-                                                  cartModel.fullPrice,
-                                                ) *
-                                                (cartModel.productQuantity - 1),
-                                          });
-                                    }
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    child: Text("-"),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                GestureDetector(
-                                  onTap: () async {
-                                    if (cartModel.productQuantity >= 1) {
-                                      FirebaseFirestore.instance
-                                          .collection('carts')
-                                          .doc(user!.uid)
-                                          .collection('cartOrders')
-                                          .doc(cartModel.productId)
-                                          .update({
-
-                                            'productQuantity':
-                                                cartModel.productQuantity + 1,
-                                            'totalPrice':
-                                                double.parse(
-                                                  cartModel.fullPrice,
-                                                ) +
-                                                double.parse(
-
-                                                      cartModel.fullPrice,
-                                                    ) *
-                                                    (cartModel.productQuantity),
-                                          });
-                                    }
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    child: Text("+"),
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
@@ -202,9 +160,11 @@ class _CartState extends State<Cart> {
             children: [
               Text("Sub Total", style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(width: Get.width / 15),
-              Obx(() => Text(
-                  "   ${cartPriceController.totalPrice.toStringAsFixed(1)}"
-              )),
+              Obx(
+                () => Text(
+                  "   ${cartPriceController.totalPrice.toStringAsFixed(1)}",
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Material(
@@ -216,10 +176,11 @@ class _CartState extends State<Cart> {
                     width: Get.width / 2.1,
                     height: Get.height / 20,
                     child: TextButton(
-                      onPressed: () {
-                       Get.to(()=>CheckOutScreen());
+                      onPressed: () async {
+                        ShowCustomeButtomSheet();
+                        //......
                       },
-                      child: Text("CheckOut"),
+                      child: Text("Confirm Order"),
                     ),
                   ),
                 ),
@@ -229,6 +190,141 @@ class _CartState extends State<Cart> {
         ),
       ),
     );
+  }
+
+  void ShowCustomeButtomSheet() {
+    Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white, // Better contrast for text fields
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(Get.context!).viewInsets.bottom,
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Important for bottom sheet height
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  hintText: 'Name',
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.amber, width: 4),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: phoneController,
+                keyboardType: TextInputType.number,
+
+                decoration: InputDecoration(
+                  hintText: 'Phone Number',
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.amber, width: 4),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextField(
+                autocorrect: true,
+                controller: addressController,
+                decoration: InputDecoration(
+                  hintText: 'Home Address',
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.amber, width: 4),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+
+              SizedBox(
+                width: 200,
+                height: 50,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () async {
+                    if (nameController.text.trim().isNotEmpty &&
+                        phoneController.text.trim().isNotEmpty &&
+                        addressController.text.trim().isNotEmpty) {
+                       name = nameController.text.trim();
+                       phone = phoneController.text.trim();
+                       address = addressController.text.trim();
+                       Customertoken = await getCustomerTokenController();
+                      var options = {
+                        'key': 'rzp_test_YghCO1so2pwPnx',
+                        'amount': 1000,
+                        'name': 'Acme Corp.',
+                        'description': 'Fine T-Shirt',
+                        'prefill': {
+                          'contact': '8888888888',
+                          'email': 'test@razorpay.com'
+                        }
+                      };
+                      _razorpay.open(options);
+                      PlaceOrder(
+                        context: context,
+                        customerName: name,
+                        customerPhone: phone,
+                        customerAddress: address,
+                        customerToken: Customertoken,
+                      );
+                    } else {
+                      Get.snackbar(
+                        "Missing Info",
+                        "Please fill all fields!",
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.check, color: Colors.white),
+                  label: const Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      isScrollControlled: true, // Ensures proper keyboard behavior
+    );
+  }
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Do something when payment succeeds
+    PlaceOrder(
+      context: context,
+        customerName: name,
+      customerPhone: phone,
+      customerAddress: address,
+      customerToken: Customertoken,
+    );
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet was selected
+  }
+  @override
+  void dispose()
+  {
+    super.dispose();
+    _razorpay.clear(); // Removes all listeners
   }
 }
 

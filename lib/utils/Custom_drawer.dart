@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:khareedu/screen/user-panel/AllOrders.dart';
 import 'package:khareedu/utils/app-constant.dart';
 
 import '../screen/auth/welcome_screen.dart';
@@ -74,7 +75,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: ListTile(
-              title: Text("Order"),
+              title: GestureDetector(
+
+                  onTap: (){
+                    Get.back();
+                    Get.to(()=>AllOrders());
+                  },
+                  child: Text("Order")),
               leading: Icon(Icons.shopping_bag),
             ),
           ),
@@ -88,7 +95,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: ListTile(
-              onTap: () async 
+              onTap: () async
               {
                 await _auth.signOut();
                 await googleSignIn.signOut();
@@ -100,7 +107,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
         ],
       ),
-      
+
     );
   }
 }

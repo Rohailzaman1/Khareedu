@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,8 +43,13 @@ class _MainScreenState extends State<MainScreen> {
                 child: Icon(Icons.shopping_cart),
               ),
             ),
+
+    //         GestureDetector(
+    // onTap: ()=>Get.to(()=>MapView()),
+    //     child:  Icon(Icons.location_on)),
           ],
         ),
+
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
